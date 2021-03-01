@@ -97,3 +97,102 @@ Sample result
 ==> box: Successfully added box 'nginx64' (v0) for 'virtualbox'!
 ```
 
+## Test OS image to ensure if nginx is installed
+Do tests to ensure if nginx package is installed
+
+- Install ruby 2.6.6 using rbenv
+
+```bash
+rbenv install -l
+rbenv install 2.6.6
+rbenv local 2.6.6 
+```
+
+Sample output
+
+```bash
+➜  packer-ob-nginx64 git:(master) rbenv install -l
+2.5.8
+2.6.6
+2.7.2
+3.0.0
+jruby-9.2.14.0
+mruby-2.1.2
+rbx-5.0
+truffleruby-21.0.0
+truffleruby+graalvm-21.0.0
+
+Only latest stable releases for each Ruby implementation are shown.
+Use 'rbenv install --list-all / -L' to show all local versions.
+
+➜  packer-ob-nginx64 git:(master) rbenv install 2.6.6
+rbenv: /Users/aakulov/.rbenv/versions/2.6.6 already exists
+continue with installation? (y/N) y
+Downloading ruby-2.6.6.tar.bz2...
+-> https://cache.ruby-lang.org/pub/ruby/2.6/ruby-2.6.6.tar.bz2
+Installing ruby-2.6.6...
+ruby-build: using readline from homebrew
+Installed ruby-2.6.6 to /Users/aakulov/.rbenv/versions/2.6.6
+
+➜  packer-ob-nginx64 git:(master) rbenv local 2.6.6 
+➜  packer-ob-nginx64 git:(master) 
+```
+
+- Install kitchen-test locally
+```bash
+bundle install --path vendor/bundle
+```
+
+Expected result
+
+```
+➜  packer-ob-nginx64 git:(master) bundle install --path vendor/bundle
+Fetching gem metadata from https://rubygems.org/........
+Fetching gem metadata from https://rubygems.org/.
+Resolving dependencies....
+Fetching concurrent-ruby 1.1.8
+Installing concurrent-ruby 1.1.8
+Fetching i18n 1.8.9
+Installing i18n 1.8.9
+Fetching minitest 5.14.4
+
+[Skipped some messages]
+
+Installing kitchen-inspec 2.4.1
+Fetching kitchen-vagrant 1.8.0
+Installing kitchen-vagrant 1.8.0
+Bundle complete! 4 Gemfile dependencies, 180 gems now installed.
+Bundled gems are installed into `./vendor/bundle`
+```
+- Perform tests
+```bash
+bundle exec kitchen test
+```
+
+Expected command output
+```bash
+-----> Starting Test Kitchen (v2.10.0)
+-----> Cleaning up any prior instances of <default-vbox-nginx64>
+-----> Destroying <default-vbox-nginx64>...
+       Finished destroying <default-vbox-nginx64> (0m0.00s).
+-----> Testing <default-vbox-nginx64>
+-----> Creating <default-vbox-nginx64>...
+       Bringing machine 'default' up with 'virtualbox' provider...
+       ==> default: Importing base box 'bionic64'...
+
+[Skipped some messages]
+
+  System Package nginx
+     ✔  is expected to be installed
+
+Test Summary: 1 successful, 0 failures, 0 skipped
+       Finished verifying <default-vbox-nginx64> (0m2.20s).
+-----> Destroying <default-vbox-nginx64>...
+       ==> default: Forcing shutdown of VM...
+       ==> default: Destroying VM and associated drives...
+       Vagrant instance <default-vbox-nginx64> destroyed.
+       Finished destroying <default-vbox-nginx64> (0m5.30s).
+       Finished testing <default-vbox-nginx64> (0m49.54s).
+-----> Test Kitchen is finished. (0m51.31s)
+
+```
