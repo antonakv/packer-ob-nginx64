@@ -1,4 +1,4 @@
-# Create a vagrant virtualbox box with nginx ubuntu lts - name it nginx64 - README.md with instructions (github repo)
+# Kitchen-vagrant test that checks the vagrant virtualbox box have nginx - README.me with instructions
 
 ## Intro
 This manual is dedicated to create vagrant virtualbox base ubuntu lts box with nginx package installed. Tested on Mac OS X.
