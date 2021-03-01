@@ -16,6 +16,9 @@ This manual is dedicated to create vagrant virtualbox base ubuntu lts box with n
 - git installed
 [Git installation manual](https://git-scm.com/download/mac)
 
+- rbenv installed
+[Rbenv installation manual](https://github.com/rbenv/rbenv#installation)
+
 ## Preparation 
 - Clone git repository. 
 
