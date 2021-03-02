@@ -19,6 +19,8 @@ This manual is dedicated to create vagrant virtualbox base ubuntu lts box with n
 - rbenv installed
 [Rbenv installation manual](https://github.com/rbenv/rbenv#installation)
 
+- have account created on [Vagrant cloud](https://app.vagrantup.com/)
+
 ## Preparation 
 - Clone git repository. 
 
@@ -198,4 +200,89 @@ Test Summary: 1 successful, 0 failures, 0 skipped
        Finished testing <default-vbox-nginx64> (0m49.54s).
 -----> Test Kitchen is finished. (0m51.31s)
 
+```
+
+## Publish vagrant box to Vagrant cloud 
+
+- Create vagrant box record on the Vagrant cloud
+```bash
+vagrant cloud box create Replace_With_your_vagrant_cloud_account_name/nginx64 --no-private
+```
+Expected result:
+```
+Created box Replace_With_your_vagrant_cloud_account_name/nginx64
+Box:              Replace_With_your_vagrant_cloud_account_name/nginx64
+Description:      
+Private:          no
+Created:          2021-03-02T09:22:41.029Z
+Updated:          2021-03-02T09:22:41.029Z
+Current Version:  N/A
+Versions:         
+Downloads:        0
+```
+- Publish the local vagrant box image to the Vagrant cloud
+Run from the same folder you were before 
+```bash
+vagrant cloud publish --box-version `date +%y.%m.%d` \
+  --force --no-private --release Replace_With_your_vagrant_cloud_account_name/nginx64 \
+  `date +%y.%m.%d` virtualbox nginx64-vbox.box 
+```
+Expected result:
+```
+You are about to publish a box on Vagrant Cloud with the following options:
+aakulov/nginx64:   (v21.03.02) for provider 'virtualbox'
+Automatic Release:     true
+Saving box information...
+Uploading provider with file /Users/aakulov/Documents/Development/Hashicorp/packer-ob-nginx64/nginx64-vbox.box
+Releasing box...
+Complete! Published Replace_With_your_vagrant_cloud_account_name/nginx64
+Box:              Replace_With_your_vagrant_cloud_account_name/nginx64
+Description:      
+Private:          no
+Created:          2021-03-02T09:22:41.029Z
+Updated:          2021-03-02T09:23:35.476Z
+Current Version:  N/A
+Versions:         21.03.02
+Downloads:        0
+
+```
+
+## How to use Vagrant box uploaded to Vagrant cloud
+
+- Prepare folder where you store downloaded vagrant boxes
+```bash
+cd
+mkdir my_vagrantboxes_folder
+```
+Expected result
+```bash
+$ cd
+$ mkdir my_vagrantboxes_folder
+$
+```
+
+- Change folder to my_vagrantboxes_folder
+```
+cd my_vagrantboxes_folder
+```
+Expected result
+```bash
+$ cd my_vagrantboxes_folder
+$
+```
+
+- Download vagrant box from Vagrant cloud
+```bash
+vagrant box add Replace_With_your_vagrant_cloud_account_name/nginx64
+```
+
+Example
+```bash
+$ vagrant box add Replace_With_your_vagrant_cloud_account_name/nginx64
+==> box: Loading metadata for box 'Replace_With_your_vagrant_cloud_account_name/nginx64'
+    box: URL: https://vagrantcloud.com/Replace_With_your_vagrant_cloud_account_name/nginx64
+==> box: Adding box 'Replace_With_your_vagrant_cloud_account_name/nginx64' (v21.03.02) for provider: virtualbox
+    box: Downloading: https://vagrantcloud.com/Replace_With_your_vagrant_cloud_account_name/boxes/nginx64/versions/21.03.02/providers/virtualbox.box
+Download redirected to host: vagrantcloud-files-production.s3.amazonaws.com
+==> box: Successfully added box 'Replace_With_your_vagrant_cloud_account_name/nginx64' (v21.03.02) for 'virtualbox'!
 ```
